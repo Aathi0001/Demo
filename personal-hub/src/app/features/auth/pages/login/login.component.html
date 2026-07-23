@@ -1,0 +1,35 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
+
+    <div class="card shadow p-4" style="width:100%; max-width:420px;">
+
+        <h2 class="text-center mb-4"> Personal Hub </h2>
+
+        <h5 class="text-center text-secondary mb-4"> Login </h5>
+
+        <div class="mb-3">
+            <label class="form-label"> Username </label>
+            <input type="text" class="form-control" placeholder="Enter username"  formControlName="username">
+	    <app-validation-error [control]="loginForm.get('username')" fieldName="Username" [showOnTouchedOnly]="true"></app-validation-error>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label"> Password </label>
+            <input type="password" class="form-control" placeholder="Enter password" formControlName="password">
+	    <app-validation-error [control]="loginForm.get('password')" fieldName="Password" [showOnTouchedOnly]="true"></app-validation-error>
+        </div>
+
+	<button class="btn btn-primary w-100" type="submit" [disabled]="loginForm.invalid"> Login </button>
+
+        <p class="text-center mt-3 mb-0">
+            Don't have an account?
+            <a routerLink="/register"> Register </a>
+        </p>
+
+    </div>
+
+</div>
+</form>
+<small class="text-danger">
+    {{ getErrorMessage() }}
+</small>

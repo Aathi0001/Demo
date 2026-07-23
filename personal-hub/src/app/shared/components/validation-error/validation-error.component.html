@@ -1,0 +1,36 @@
+<div
+    *ngIf="control &&
+           control.invalid &&
+           (control.touched || control.dirty)">
+
+    <small
+        class="text-danger"
+        *ngIf="control.hasError('required')">
+
+        {{ fieldName }} is required.
+
+    </small>
+
+    <small
+        class="text-danger"
+        *ngIf="control.hasError('minlength')">
+
+        {{ fieldName }}
+        must be at least
+        {{ control.errors?.['minlength'].requiredLength }}
+        characters.
+
+    </small>
+
+    <small
+        class="text-danger"
+        *ngIf="control.hasError('maxlength')">
+
+        {{ fieldName }}
+        cannot exceed
+        {{ control.errors?.['maxlength'].requiredLength }}
+        characters.
+
+    </small>
+
+</div>
