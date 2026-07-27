@@ -1,0 +1,133 @@
+<div class="overlay">
+
+<div class="dialog">
+
+<h2>
+
+{{ worklog ? 'Edit Work Log' : 'New Work Log' }}
+
+</h2>
+
+<form
+
+[formGroup]="form"
+
+(ngSubmit)="submit()">
+
+<select formControlName="project_id">
+
+<option [ngValue]="null">
+
+Select Project
+
+</option>
+
+<option
+
+*ngFor="let project of projects"
+
+[ngValue]="project.project_id">
+
+{{ project.project_name }}
+
+</option>
+
+</select>
+
+<select formControlName="category_id">
+
+<option [ngValue]="null">
+
+Select Category
+
+</option>
+
+<option
+
+*ngFor="let category of categories"
+
+[ngValue]="category.category_id">
+
+{{ category.category_name }}
+
+</option>
+
+</select>
+
+<input
+
+type="text"
+
+placeholder="Title (Optional)"
+
+formControlName="title">
+
+<textarea
+
+rows="6"
+
+placeholder="Notes"
+
+formControlName="notes">
+
+</textarea>
+
+<input
+
+type="date"
+
+formControlName="work_date">
+
+<div class="duration">
+
+<input
+
+type="number"
+
+min="0"
+
+placeholder="Hours"
+
+formControlName="hours">
+
+<input
+
+type="number"
+
+min="0"
+
+max="59"
+
+placeholder="Minutes"
+
+formControlName="minutes">
+
+</div>
+
+<div class="buttons">
+
+<button
+
+type="button"
+
+(click)="close.emit()">
+
+Cancel
+
+</button>
+
+<button
+
+type="submit">
+
+Save
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>

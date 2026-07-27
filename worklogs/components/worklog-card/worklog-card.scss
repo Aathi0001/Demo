@@ -1,0 +1,117 @@
+.worklog-card{
+
+    background:#fff;
+
+    border-radius:10px;
+
+    padding:14px 18px;
+
+    margin-bottom:10px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.worklog-card:hover{
+
+    transform:translateY(-1px);
+
+    box-shadow:0 5px 14px rgba(0,0,0,.10);
+
+}
+
+.row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.time{
+
+    width:75px;
+
+    font-weight:600;
+
+    color:#0d6efd;
+
+}
+
+.project{
+
+    width:140px;
+
+    color:#444;
+
+    font-weight:500;
+
+}
+
+.category{
+
+    width:120px;
+
+    color:#666;
+
+}
+
+.title{
+
+    flex:1;
+
+    font-weight:600;
+
+}
+
+.notes{
+
+    margin-top:10px;
+
+    color:#666;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+.menu-btn{
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+@media(max-width:768px){
+
+    .row{
+
+        flex-wrap:wrap;
+
+    }
+
+    .project,
+
+    .category,
+
+    .time{
+
+        width:auto;
+
+    }
+
+}

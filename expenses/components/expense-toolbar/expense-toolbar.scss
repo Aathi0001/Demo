@@ -1,0 +1,61 @@
+.toolbar{
+
+    display:grid;
+
+    grid-template-columns:
+
+        2fr
+        180px
+        220px
+        170px;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.toolbar input,
+.toolbar select{
+
+    padding:10px;
+
+    border:1px solid #dcdcdc;
+
+    border-radius:8px;
+
+    font-size:14px;
+
+}
+
+.toolbar button{
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0d6efd;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.toolbar button:hover{
+
+    background:#0b5ed7;
+
+}
+
+@media(max-width:900px){
+
+    .toolbar{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

@@ -1,0 +1,177 @@
+export const API = {
+
+    ...
+
+    WORKLOG: {
+
+        LIST:
+            '/api/worklogs/list/',
+
+        DETAIL:
+            '/api/worklogs/detail/',
+
+        CREATE:
+            '/api/worklogs/create/',
+
+        UPDATE:
+            '/api/worklogs/update/',
+
+        SCHEDULE_DELETE:
+            '/api/worklogs/schedule-delete/',
+
+        RESTORE:
+            '/api/worklogs/restore/',
+
+        PERMANENT_DELETE:
+            '/api/worklogs/permanent-delete/'
+
+    }
+
+};
+
+
+import { WorkLog } from './features/worklogs/pages/worklog';
+
+{
+    path: 'worklogs',
+    component: WorkLog
+},
+
+
+
+
+
+Expected Backend Response
+
+Instead of returning a flat list, I recommend returning:
+
+[
+    {
+        "day": "Monday",
+        "logs": [
+            {
+                "worklog_id":1,
+                "title":"Login API",
+                "notes":"Completed login module",
+                "project_name":"Personal Hub",
+                "category_name":"Backend",
+                "duration":"02:30"
+            },
+            {
+                "worklog_id":2,
+                "title":"JWT",
+                "notes":"Implemented JWT",
+                "project_name":"Personal Hub",
+                "category_name":"Backend",
+                "duration":"01:20"
+            }
+        ]
+    },
+    {
+        "day":"Tuesday",
+        "logs":[]
+    },
+    {
+        "day":"Wednesday",
+        "logs":[]
+    }
+]
+
+
+
+
+Small improvement I'd recommend
+
+Instead of storing duration as "2:5" or "10:3", format it before sending:
+
+duration:
+`${String(value.hours).padStart(2,'0')}:${String(value.minutes).padStart(2,'0')}`
+
+That way the backend always receives:
+
+00:30
+01:05
+02:45
+10:00
+
+which is cleaner and easier to display later.
+
+
+
+
+
+
+
+
+
+
+// Expense
+
+static readonly EXPENSE_LIST =
+'/api/expense/list/';
+
+static readonly EXPENSE_CREATE =
+'/api/expense/create/';
+
+static readonly EXPENSE_DETAIL =
+(id:number)=>
+`/api/expense/detail/${id}/`;
+
+static readonly EXPENSE_UPDATE =
+(id:number)=>
+`/api/expense/update/${id}/`;
+
+static readonly EXPENSE_DELETE =
+(id:number)=>
+`/api/expense/delete/${id}/`;
+
+static readonly EXPENSE_RESTORE =
+(id:number)=>
+`/api/expense/restore/${id}/`;
+
+static readonly EXPENSE_PERMANENT_DELETE =
+(id:number)=>
+`/api/expense/permanent-delete/${id}/`;
+
+
+
+
+
+
+import {
+    Routes
+} from '@angular/router';
+
+import {
+    Expense
+} from './pages/expense/expense';
+
+export const EXPENSE_ROUTES: Routes = [
+
+    {
+
+        path: '',
+
+        component: Expense
+
+    }
+
+];
+
+
+
+
+
+
+
+{
+
+    path:'expense',
+
+    loadChildren:()=>
+
+        import('./features/expense/expense.routes')
+
+        .then(m=>m.EXPENSE_ROUTES)
+
+},

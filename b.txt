@@ -1,0 +1,101 @@
+Yes. I remember your backend has a common pagination helper that currently works like:
+
+* `page`
+* `page_size`
+* `offset`
+* `total_pages`
+
+For **Anime** and **Notes**, keep it exactly as it is.
+
+For **Work Log** and **Expense**, I wouldn't modify that helper at all. Instead, create two small helper functions alongside it.
+
+---
+
+### 1. Expense Month Helper
+
+```python
+from datetime import date
+from calendar import monthrange
+
+def get_month_range(month=None):
+
+    if not month:
+
+        today = date.today()
+
+        year = today.year
+
+        month_no = today.month
+
+    else:
+
+        year, month_no = map(int, month.split("-"))
+
+    start_date = date(year, month_no, 1)
+
+    end_date = date(
+        year,
+        month_no,
+        monthrange(year, month_no)[1]
+    )
+
+    return start_date, end_date
+```
+
+Usage:
+
+```python
+start_date, end_date = get_month_range(request.month)
+
+queryset = queryset.filter(
+    expense_date__range=(start_date, end_date)
+)
+```
+
+---
+
+### 2. Work Log Week Helper
+
+```python
+from datetime import date, timedelta
+
+def get_week_range(year, month, week):
+
+    first_day = date(year, month, 1)
+
+    start_date = first_day + timedelta(days=(week - 1) * 7)
+
+    end_date = start_date + timedelta(days=13)
+
+    return start_date, end_date
+```
+
+If you decide to show **2 weeks** together, `end_date` becomes `start_date + 13 days`.
+
+Then:
+
+```python
+start_date, end_date = get_week_range(
+    request.year,
+    request.month,
+    request.week
+)
+
+queryset = queryset.filter(
+    work_date__range=(start_date, end_date)
+)
+```
+
+---
+
+### So your pagination helper becomes:
+
+| Module   | Helper                     |
+| -------- | -------------------------- |
+| Anime    | Existing pagination helper |
+| Notes    | Existing pagination helper |
+| Work Log | `get_week_range()`         |
+| Expense  | `get_month_range()`        |
+
+This way you don't have to rewrite your existing pagination utility at all. You simply use the appropriate helper based on the module. I think this keeps the backend much cleaner than trying to force week/month navigation into a page-based helper.
+

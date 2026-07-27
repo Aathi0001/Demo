@@ -1,0 +1,47 @@
+.worklog-page{
+
+    padding:20px;
+
+}
+
+.worklog-menu{
+
+    position:fixed;
+
+    background:#fff;
+
+    border-radius:10px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+
+    padding:6px;
+
+    min-width:180px;
+
+    z-index:999;
+
+}
+
+.worklog-menu button{
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    text-align:left;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    border-radius:6px;
+
+}
+
+.worklog-menu button:hover{
+
+    background:#f5f5f5;
+
+}

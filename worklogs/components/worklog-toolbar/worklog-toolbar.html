@@ -1,0 +1,103 @@
+<form
+    class="toolbar"
+    [formGroup]="toolbarForm">
+
+    <input
+
+        type="text"
+
+        placeholder="🔍 Search Work Logs"
+
+        formControlName="search">
+
+
+    <select
+        formControlName="project_id">
+
+        <option
+            [ngValue]="null">
+
+            All Projects
+
+        </option>
+
+        <option
+
+            *ngFor="let project of projects"
+
+            [ngValue]="project.project_id">
+
+            {{ project.project_name }}
+
+        </option>
+
+    </select>
+
+
+    <select
+        formControlName="category_id">
+
+        <option
+            [ngValue]="null">
+
+            All Categories
+
+        </option>
+
+        <option
+
+            *ngFor="let category of categories"
+
+            [ngValue]="category.category_id">
+
+            {{ category.category_name }}
+
+        </option>
+
+    </select>
+
+
+    <div class="week-selector">
+
+        <button
+
+            type="button"
+
+            (click)="previousWeek.emit()">
+
+            ◀
+
+        </button>
+
+        <span>
+
+            {{ weekLabel }}
+
+        </span>
+
+        <button
+
+            type="button"
+
+            (click)="nextWeek.emit()">
+
+            ▶
+
+        </button>
+
+    </div>
+
+
+    <button
+
+        type="button"
+
+        class="new-btn"
+
+        (click)="create.emit()">
+
+        + New Work Log
+
+    </button>
+
+</form>

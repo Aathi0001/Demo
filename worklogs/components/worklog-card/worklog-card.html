@@ -1,0 +1,57 @@
+<div
+
+    class="worklog-card"
+
+    (click)="open.emit()"
+
+    (contextmenu)="menu.emit($event);$event.preventDefault()"
+
+    (touchstart)="startPress($event)"
+
+    (touchend)="stopPress()">
+
+    <div class="row">
+
+        <div class="time">
+
+            {{ worklog.duration }}
+
+        </div>
+
+        <div class="project">
+
+            {{ worklog.project_name || '-' }}
+
+        </div>
+
+        <div class="category">
+
+            {{ worklog.category_name || '-' }}
+
+        </div>
+
+        <div class="title">
+
+            {{ worklog.title || 'Untitled' }}
+
+        </div>
+
+        <button
+
+            class="menu-btn"
+
+            (click)="menu.emit($event);$event.stopPropagation()">
+
+            ⋮
+
+        </button>
+
+    </div>
+
+    <div class="notes">
+
+        {{ worklog.notes }}
+
+    </div>
+
+</div>

@@ -1,0 +1,154 @@
+{
+    "year": 2026,
+
+    "month": 7,
+
+    "month_name": "July 2026",
+
+    "summary": {
+
+        "credit": 50000,
+
+        "debit": 23500,
+
+        "balance": 26500
+
+    },
+
+    "results": [
+
+        {
+
+            "week": 1,
+
+            "items": [
+
+                {
+
+                    "expense_id": 1,
+
+                    "expense_date": "2026-07-02",
+
+                    "payment_method_id": 1,
+
+                    "payment_method_name": "Cash",
+
+                    "amount": 350,
+
+                    "amount_type": "debit",
+
+                    "notes": "Groceries"
+
+                },
+
+                {
+
+                    "expense_id": 2,
+
+                    "expense_date": "2026-07-03",
+
+                    "payment_method_name": "UPI",
+
+                    "amount": 25000,
+
+                    "amount_type": "credit",
+
+                    "notes": "Salary"
+
+                }
+
+            ]
+
+        },
+
+        {
+
+            "week": 2,
+
+            "items": [
+
+            ]
+
+        }
+
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    "year": 2026,
+    "month": 7,
+    "week": 3,
+
+    "previous_week": 2,
+    "next_week": 4,
+
+    "results": [
+
+        {
+
+            "date": "2026-07-13",
+
+            "day": "Monday",
+
+            "items": [
+
+                {
+                    "worklog_id": 1,
+                    "project_id": 2,
+                    "project_name": "Personal Hub",
+
+                    "category_id": 3,
+                    "category_name": "Backend",
+
+                    "title": "Pagination",
+
+                    "notes": "...",
+
+                    "duration": 120
+                },
+
+                {
+                    "worklog_id": 2,
+                    "project_name": "Personal Hub",
+                    "category_name": "Frontend",
+                    "title": "Angular",
+                    "notes": "...",
+                    "duration": 90
+                }
+
+            ]
+
+        },
+
+        {
+
+            "date": "2026-07-14",
+
+            "day": "Tuesday",
+
+            "items": []
+
+        }
+
+    ]
+}

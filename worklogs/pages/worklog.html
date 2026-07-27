@@ -1,0 +1,107 @@
+<div class="worklog-page">
+
+    <app-worklog-toolbar
+
+        [projects]="projects"
+
+        [categories]="categories"
+
+        [weekLabel]="weekLabel"
+
+        (search)="search($event)"
+
+        (projectChange)="projectChanged($event)"
+
+        (categoryChange)="categoryChanged($event)"
+
+        (previousWeek)="previousWeek()"
+
+        (nextWeek)="nextWeek()"
+
+        (create)="create()">
+
+    </app-worklog-toolbar>
+
+    <app-worklog-list
+
+        [groups]="groups"
+
+        (open)="openWorkLog($event)"
+
+        (menu)="openMenu($event)">
+
+    </app-worklog-list>
+
+</div>
+
+<app-worklog-form
+
+    *ngIf="showForm"
+
+    [worklog]="selectedWorkLog"
+
+    [projects]="projects"
+
+    [categories]="categories"
+
+    (save)="save($event)"
+
+    (close)="closeForm()">
+
+</app-worklog-form>
+
+<app-delete-password
+
+    *ngIf="showDeleteDialog"
+
+    (confirm)="permanentDelete($event)"
+
+    (close)="closeDeleteDialog()">
+
+</app-delete-password>
+
+<div
+
+    class="worklog-menu"
+
+    *ngIf="showMenu"
+
+    [style.left.px]="menuX"
+
+    [style.top.px]="menuY">
+
+    <button (click)="editWorkLog()">
+
+        Edit
+
+    </button>
+
+    <button
+
+        *ngIf="!selectedWorkLog?.delete_status"
+
+        (click)="deleteWorkLog()">
+
+        Delete
+
+    </button>
+
+    <button
+
+        *ngIf="selectedWorkLog?.delete_status"
+
+        (click)="restoreWorkLog()">
+
+        Restore
+
+    </button>
+
+    <button
+
+        (click)="openDeleteDialog()">
+
+        Permanent Delete
+
+    </button>
+
+</div>

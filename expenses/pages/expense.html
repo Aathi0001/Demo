@@ -1,0 +1,227 @@
+<div class="expense-page">
+
+    <app-expense-toolbar
+
+        [paymentMethods]="paymentMethods"
+
+        (search)="search($event)"
+
+        (monthChange)="monthChanged($event)"
+
+        (paymentMethodChange)="paymentMethodChanged($event)"
+
+        (create)="create()">
+
+    </app-expense-toolbar>
+
+    <app-expense-list
+
+        [weeks]="weeks"
+
+        [totalCredit]="totalCredit"
+
+        [totalDebit]="totalDebit"
+
+        [balance]="balance"
+
+        (open)="openExpense($event)"
+
+        (menu)="openMenu($event)">
+
+    </app-expense-list>
+
+</div>
+
+<!-- View Expense -->
+
+<div
+
+    class="expense-view-overlay"
+
+    *ngIf="openedExpense">
+
+    <div class="expense-view">
+
+        <div class="expense-view-header">
+
+            <h2>
+
+                Expense Details
+
+            </h2>
+
+            <button
+
+                type="button"
+
+                (click)="closeExpense()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div class="expense-info">
+
+            <div>
+
+                <label>
+
+                    Amount
+
+                </label>
+
+                <span
+
+                    [class.credit]="openedExpense.amount_type=='credit'"
+
+                    [class.debit]="openedExpense.amount_type=='debit'">
+
+                    {{openedExpense.amount_type=='credit'?'+':'-'}}
+
+                    ₹{{openedExpense.amount}}
+
+                </span>
+
+            </div>
+
+            <div>
+
+                <label>
+
+                    Payment Method
+
+                </label>
+
+                <span>
+
+                    {{openedExpense.payment_method_name}}
+
+                </span>
+
+            </div>
+
+            <div>
+
+                <label>
+
+                    Date
+
+                </label>
+
+                <span>
+
+                    {{openedExpense.expense_date}}
+
+                </span>
+
+            </div>
+
+            <div>
+
+                <label>
+
+                    Notes
+
+                </label>
+
+                <p>
+
+                    {{openedExpense.notes}}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Context Menu -->
+
+<div
+
+    class="expense-menu"
+
+    *ngIf="showMenu"
+
+    [style.left.px]="menuX"
+
+    [style.top.px]="menuY">
+
+    <button
+
+        type="button"
+
+        (click)="editExpense()">
+
+        Edit
+
+    </button>
+
+    <button
+
+        *ngIf="!selectedExpense?.delete_status"
+
+        type="button"
+
+        (click)="deleteExpense()">
+
+        Delete
+
+    </button>
+
+    <button
+
+        *ngIf="selectedExpense?.delete_status"
+
+        type="button"
+
+        (click)="restoreExpense()">
+
+        Restore
+
+    </button>
+
+    <button
+
+        type="button"
+
+        (click)="openDeleteDialog()">
+
+        Permanent Delete
+
+    </button>
+
+</div>
+
+<!-- Form -->
+
+<app-expense-form
+
+    *ngIf="showForm"
+
+    [expense]="selectedExpense"
+
+    [paymentMethods]="paymentMethods"
+
+    (save)="save($event)"
+
+    (close)="closeForm()">
+
+</app-expense-form>
+
+<!-- Delete Password -->
+
+<app-delete-password
+
+    *ngIf="showDeleteDialog"
+
+    (confirm)="permanentDelete($event)"
+
+    (close)="closeDeleteDialog()">
+
+</app-delete-password>

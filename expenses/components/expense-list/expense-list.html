@@ -1,0 +1,151 @@
+<div class="summary">
+
+    <div>
+
+        <span>Credit</span>
+
+        <strong class="credit">
+
+            ₹{{totalCredit}}
+
+        </strong>
+
+    </div>
+
+    <div>
+
+        <span>Debit</span>
+
+        <strong class="debit">
+
+            ₹{{totalDebit}}
+
+        </strong>
+
+    </div>
+
+    <div>
+
+        <span>Balance</span>
+
+        <strong>
+
+            ₹{{balance}}
+
+        </strong>
+
+    </div>
+
+</div>
+
+<div
+
+    *ngFor="let week of weeks"
+
+    class="week">
+
+    <h3>
+
+        {{week.week}}
+
+    </h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Payment</th>
+
+                <th>Notes</th>
+
+                <th>Amount</th>
+
+                <th></th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr
+
+                *ngFor="let expense of week.expenses"
+
+                (click)="openExpense(expense)">
+
+                <td>
+
+                    {{expense.expense_date}}
+
+                </td>
+
+                <td>
+
+                    {{expense.payment_method_name}}
+
+                </td>
+
+                <td
+
+                    class="notes"
+
+                    [title]="expense.notes">
+
+                    {{expense.notes}}
+
+                </td>
+
+                <td>
+
+                    <span
+
+                        [class.credit]="expense.amount_type=='credit'"
+
+                        [class.debit]="expense.amount_type=='debit'">
+
+                        {{expense.amount_type=='credit'?'+':'-'}}
+
+                        ₹{{expense.amount}}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+
+                        class="menu-btn"
+
+                        (click)="openMenu($event,expense);
+
+                                 $event.stopPropagation()">
+
+                        ⋮
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div
+
+    class="empty"
+
+    *ngIf="weeks.length==0">
+
+    No Expenses Found
+
+</div>

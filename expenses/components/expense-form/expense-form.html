@@ -1,0 +1,135 @@
+<div class="overlay">
+
+    <div class="dialog">
+
+        <h2>
+
+            {{ expense ? 'Edit Expense' : 'New Expense' }}
+
+        </h2>
+
+        <form
+
+            [formGroup]="form"
+
+            (ngSubmit)="submit()">
+
+            <label>
+
+                Payment Method
+
+            </label>
+
+            <select
+
+                formControlName="payment_method_id">
+
+                <option
+
+                    [ngValue]="null">
+
+                    Select
+
+                </option>
+
+                <option
+
+                    *ngFor="let paymentMethod of paymentMethods"
+
+                    [ngValue]="paymentMethod.payment_method_id">
+
+                    {{ paymentMethod.payment_method_name }}
+
+                </option>
+
+            </select>
+
+            <label>
+
+                Amount
+
+            </label>
+
+            <input
+
+                type="number"
+
+                formControlName="amount">
+
+            <label>
+
+                Type
+
+            </label>
+
+            <select
+
+                formControlName="amount_type">
+
+                <option value="credit">
+
+                    Credit
+
+                </option>
+
+                <option value="debit">
+
+                    Debit
+
+                </option>
+
+            </select>
+
+            <label>
+
+                Expense Date
+
+            </label>
+
+            <input
+
+                type="date"
+
+                formControlName="expense_date">
+
+            <label>
+
+                Notes
+
+            </label>
+
+            <textarea
+
+                rows="6"
+
+                formControlName="notes">
+
+            </textarea>
+
+            <div class="buttons">
+
+                <button
+
+                    type="button"
+
+                    (click)="cancel()">
+
+                    Cancel
+
+                </button>
+
+                <button
+
+                    type="submit">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

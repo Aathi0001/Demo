@@ -1,0 +1,147 @@
+.summary{
+
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+}
+
+.summary div{
+
+    flex:1;
+
+    padding:18px;
+
+    background:white;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+
+}
+
+.summary span{
+
+    display:block;
+
+    color:#777;
+
+    margin-bottom:6px;
+
+}
+
+.summary strong{
+
+    font-size:22px;
+
+}
+
+.credit{
+
+    color:#198754;
+
+    font-weight:700;
+
+}
+
+.debit{
+
+    color:#dc3545;
+
+    font-weight:700;
+
+}
+
+.week{
+
+    margin-bottom:25px;
+
+}
+
+.week h3{
+
+    margin-bottom:12px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+}
+
+th{
+
+    background:#f5f5f5;
+
+    text-align:left;
+
+    padding:12px;
+
+}
+
+td{
+
+    padding:12px;
+
+    border-top:1px solid #ececec;
+
+}
+
+tbody tr{
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+tbody tr:hover{
+
+    background:#f8f9fa;
+
+}
+
+.notes{
+
+    max-width:300px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+
+.menu-btn{
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+.empty{
+
+    text-align:center;
+
+    padding:40px;
+
+    color:#777;
+
+}

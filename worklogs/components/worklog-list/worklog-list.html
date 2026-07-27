@@ -1,0 +1,39 @@
+<div class="worklog-list">
+
+    <div
+
+        class="day-group"
+
+        *ngFor="let group of groups">
+
+        <div class="day-header">
+
+            {{ group.day }}
+
+        </div>
+
+        <div
+
+            class="empty"
+
+            *ngIf="group.logs.length===0">
+
+            No Work Logs
+
+        </div>
+
+        <app-worklog-card
+
+            *ngFor="let worklog of group.logs"
+
+            [worklog]="worklog"
+
+            (open)="openWorkLog(worklog)"
+
+            (menu)="openMenu($event,worklog)">
+
+        </app-worklog-card>
+
+    </div>
+
+</div>

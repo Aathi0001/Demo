@@ -1,0 +1,55 @@
+<form
+
+    class="toolbar"
+
+    [formGroup]="form">
+
+    <input
+
+        type="text"
+
+        placeholder="🔍 Search Expenses"
+
+        formControlName="search">
+
+    <input
+
+        type="month"
+
+        formControlName="month">
+
+    <select
+
+        formControlName="payment_method_id">
+
+        <option
+
+            [ngValue]="null">
+
+            All Payment Methods
+
+        </option>
+
+        <option
+
+            *ngFor="let paymentMethod of paymentMethods"
+
+            [ngValue]="paymentMethod.payment_method_id">
+
+            {{ paymentMethod.payment_method_name }}
+
+        </option>
+
+    </select>
+
+    <button
+
+        type="button"
+
+        (click)="create.emit()">
+
+        + New Expense
+
+    </button>
+
+</form>
