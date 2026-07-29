@@ -1,0 +1,131 @@
+.timeline-backdrop{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:1000;
+
+}
+
+.timeline-dialog{
+
+    width:420px;
+
+    max-width:95%;
+
+    max-height:80vh;
+
+    overflow:auto;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+
+}
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.close-btn{
+
+    border:none;
+
+    background:none;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+}
+
+.year{
+
+    margin-bottom:16px;
+
+}
+
+.year-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    padding:8px 0;
+
+}
+
+.month-list{
+
+    margin-left:24px;
+
+    border-left:2px solid #e5e5e5;
+
+}
+
+.month-item{
+
+    padding:14px 16px;
+
+    cursor:pointer;
+
+    border-bottom:1px solid #eee;
+
+    transition:.2s;
+
+}
+
+.month-item:hover{
+
+    background:#f8f9fa;
+
+}
+
+.month-name{
+
+    font-weight:600;
+
+    margin-bottom:6px;
+
+}
+
+.month-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#666;
+
+    font-size:14px;
+
+}

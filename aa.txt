@@ -1,0 +1,679 @@
+path(
+    "timeline/years/",
+    WorkLogTimelineYearsView.as_view()
+),
+
+path(
+    "timeline/",
+    WorkLogTimelineView.as_view()
+),
+
+from apps.worklog.views.worklog_timeline import WorkLogTimelineView
+
+from apps.worklog.views.worklog_timeline_years import WorkLogTimelineYearsView
+
+----------------------------
+
+WORKLOG_TIMELINE_LOADED = "Timeline loaded successfully."
+
+WORKLOG_TIMELINE_YEARS_LOADED = "Timeline years loaded successfully."
+
+----------------------------
+api-endpoint.ts
+
+WORKLOG_TIMELINE =
+'/api/worklog/timeline/';
+
+WORKLOG_TIMELINE_YEARS =
+'/api/worklog/timeline/years/';
+
+-------------------------------
+worklog_services.ts
+
+
+getTimelineYears(){
+
+    return this.http.post(
+
+        ApiEndpoints.WORKLOG_TIMELINE_YEARS,
+
+        {}
+
+    );
+
+}
+
+getTimeline(
+    year:number
+){
+
+    return this.http.post(
+
+        ApiEndpoints.WORKLOG_TIMELINE,
+
+        {
+
+            year
+
+        }
+
+    );
+
+}
+
+-----------------------------
+
+worklog.html
+
+<app-timeline
+
+    *ngIf="showTimeline"
+
+    [visible]="showTimeline"
+
+    (close)="closeTimeline()"
+
+    (weekSelected)="weekSelected($event)">
+
+</app-timeline>
+
+
+<app-worklog-toolbar
+
+    ...
+
+    (timeline)="openTimeline()"
+
+    (create)="create()">
+
+</app-worklog-toolbar>
+
+
+------------------------
+
+tool-bar.ts
+
+@Output()
+
+timeline =
+new EventEmitter<void>();
+
+
+------------------------
+
+
+worklog.ts
+
+
+import {
+    Timeline
+} from '../timeline/timeline';
+
+
+imports: [
+
+    CommonModule,
+
+    WorkLogToolbar,
+
+    WorkLogList,
+
+    WorkLogForm,
+
+    DeletePassword,
+
+    Timeline
+
+]
+
+
+showTimeline=false;
+
+openTimeline(): void {
+
+    this.showTimeline = true;
+
+}
+
+closeTimeline(): void {
+
+    this.showTimeline = false;
+
+}
+
+weekSelected(
+    weekOffset: number
+): void {
+
+    this.request.week_offset =
+        weekOffset;
+
+    this.showTimeline = false;
+
+    this.loadWorkLogs();
+
+}
+
+
+
+-----------------------------
+
+worklog-toolbar.html
+
+<button
+
+    type="button"
+
+    class="timeline-btn"
+
+    (click)="timeline.emit()">
+
+    📅 Timeline
+
+</button>
+
+
+----------------------------
+
+-----------------------------------------------------
+
+expense url:
+----------
+
+from apps.expense.views.expense_timeline_year import (
+    ExpenseTimelineYearView
+)
+
+from apps.expense.views.expense_timeline_month import (
+    ExpenseTimelineMonthView
+)
+
+path(
+    "timeline/year/",
+    ExpenseTimelineYearView.as_view()
+),
+
+path(
+    "timeline/month/",
+    ExpenseTimelineMonthView.as_view()
+),
+
+--------------------------------------------------
+
+expense services :
+
+from django.db.models import Count
+from django.db.models import Sum
+from django.db.models import Case
+from django.db.models import When
+from django.db.models import Value
+from django.db.models import DecimalField
+from django.db.models.functions import ExtractYear
+from django.db.models.functions import Coalesce
+
+import calendar
+
+from datetime import date
+
+from django.db.models.functions import ExtractMonth
+
+
+def timeline_years(
+    self,
+    user
+):
+
+    queryset = (
+        Expense.objects
+        .filter(
+            user=user,
+            delete_status=False
+        )
+        .annotate(
+            year=ExtractYear("expense_date")
+        )
+        .values("year")
+        .annotate(
+
+            expense_count=Count("expense_id"),
+
+            total_credit=Coalesce(
+
+                Sum(
+
+                    Case(
+
+                        When(
+                            transaction_type="credit",
+                            then="amount"
+                        ),
+
+                        default=Value(0),
+
+                        output_field=DecimalField()
+
+                    )
+
+                ),
+
+                0
+
+            ),
+
+            total_debit=Coalesce(
+
+                Sum(
+
+                    Case(
+
+                        When(
+                            transaction_type="debit",
+                            then="amount"
+                        ),
+
+                        default=Value(0),
+
+                        output_field=DecimalField()
+
+                    )
+
+                ),
+
+                0
+
+            )
+
+        )
+        .order_by("-year")
+    )
+
+    results = []
+
+    for item in queryset:
+
+        results.append({
+
+            "year":
+            item["year"],
+
+            "expense_count":
+            item["expense_count"],
+
+            "total_credit":
+            item["total_credit"],
+
+            "total_debit":
+            item["total_debit"],
+
+            "net_amount":
+            item["total_credit"] -
+            item["total_debit"]
+
+        })
+
+    return results
+
+
+def timeline_months(
+    self,
+    user,
+    year
+):
+
+    queryset = (
+        Expense.objects
+        .filter(
+            user=user,
+            delete_status=False,
+            expense_date__year=year
+        )
+        .annotate(
+            month=ExtractMonth("expense_date")
+        )
+        .values("month")
+        .annotate(
+
+            expense_count=Count("expense_id"),
+
+            total_credit=Coalesce(
+
+                Sum(
+
+                    Case(
+
+                        When(
+                            transaction_type="credit",
+                            then="amount"
+                        ),
+
+                        default=Value(0),
+
+                        output_field=DecimalField()
+
+                    )
+
+                ),
+
+                0
+
+            ),
+
+            total_debit=Coalesce(
+
+                Sum(
+
+                    Case(
+
+                        When(
+                            transaction_type="debit",
+                            then="amount"
+                        ),
+
+                        default=Value(0),
+
+                        output_field=DecimalField()
+
+                    )
+
+                ),
+
+                0
+
+            )
+
+        )
+        .order_by("-month")
+    )
+
+    today = date.today()
+
+    current_month = today.month
+
+    current_year = today.year
+
+    results = []
+
+    for item in queryset:
+
+        month = item["month"]
+
+        month_offset = (
+            (current_year - year) * 12
+            + (current_month - month)
+        )
+
+        results.append({
+
+            "month":
+            month,
+
+            "month_name":
+            calendar.month_name[month],
+
+            "expense_count":
+            item["expense_count"],
+
+            "total_credit":
+            item["total_credit"],
+
+            "total_debit":
+            item["total_debit"],
+
+            "net_amount":
+            item["total_credit"] -
+            item["total_debit"],
+
+            "month_offset":
+            month_offset
+
+        })
+
+    return results
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------
+
+
+services.ts
+
+import {
+    ExpenseTimelineYearModel
+} from '../models/expense-timeline-year';
+
+import {
+    ExpenseTimelineMonthModel
+} from '../models/expense-timeline-month';
+
+timelineYears():
+Observable<ApiResponse<ExpenseTimelineYearModel[]>>{
+
+    return this.http.post<
+        ApiResponse<
+            ExpenseTimelineYearModel[]
+        >
+    >(
+        ApiEndpoints.EXPENSE_TIMELINE_YEAR,
+        {}
+    );
+
+}
+
+timelineMonths(
+    year:number
+):
+Observable<ApiResponse<ExpenseTimelineMonthModel[]>>{
+
+    return this.http.post<
+        ApiResponse<
+            ExpenseTimelineMonthModel[]
+        >
+    >(
+        ApiEndpoints.EXPENSE_TIMELINE_MONTH,
+        {
+
+            year
+
+        }
+    );
+
+}
+
+
+
+-----------------------------------------
+
+api-endpoint.ts
+
+static readonly
+EXPENSE_TIMELINE_YEAR =
+'/api/expense/timeline/year/';
+
+static readonly
+EXPENSE_TIMELINE_MONTH =
+'/api/expense/timeline/month/';
+
+
+------------------------------------------------
+
+
+expense.ts
+
+
+import {
+    ExpenseTimeline
+} from './components/expense-timeline/expense-timeline';
+
+import {
+    ExpenseTimelineYearModel
+} from './models/expense-timeline-year';
+
+import {
+    ExpenseTimelineMonthModel
+} from './models/expense-timeline-month';
+
+imports:[
+
+    ...
+
+    ExpenseTimeline
+
+]
+
+
+timelineYears:ExpenseTimelineYearModel[]=[];
+
+timelineMonths:ExpenseTimelineMonthModel[]=[];
+
+selectedTimelineYear:number|null=null;
+
+showTimeline=false;
+
+openTimeline():void{
+
+    this.showTimeline=true;
+
+    this.expenseService
+        .timelineYears()
+        .subscribe({
+
+            next:response=>{
+
+                this.timelineYears=
+                    response.data;
+
+            }
+
+        });
+
+}
+
+
+closeTimeline():void{
+
+    this.showTimeline=false;
+
+    this.selectedTimelineYear=null;
+
+    this.timelineMonths=[];
+
+}
+
+
+yearSelected(
+    year:number
+):void{
+
+    if(
+        this.selectedTimelineYear===year
+    ){
+
+        this.selectedTimelineYear=null;
+
+        this.timelineMonths=[];
+
+        return;
+
+    }
+
+    this.selectedTimelineYear=year;
+
+    this.expenseService
+        .timelineMonths(year)
+        .subscribe({
+
+            next:response=>{
+
+                this.timelineMonths=
+                    response.data;
+
+            }
+
+        });
+
+}
+
+
+monthSelected(
+    offset:number
+):void{
+
+    this.request.month_offset=
+        offset;
+
+    this.closeTimeline();
+
+    this.loadExpenses();
+
+}
+
+
+------------------------------
+
+expense.html
+
+<app-expense-timeline
+
+    *ngIf="showTimeline"
+
+    [years]="timelineYears"
+
+    [months]="timelineMonths"
+
+    [selectedYear]="selectedTimelineYear"
+
+    (yearSelected)="yearSelected($event)"
+
+    (monthSelected)="monthSelected($event)"
+
+    (close)="closeTimeline()">
+
+</app-expense-timeline>
+
+
+<app-expense-toolbar
+
+...
+
+(timeline)="openTimeline()">
+
+</app-expense-toolbar>
+
+
+-----------------------------------
+
+expense-toolbar.ts
+
+@Output()
+
+timeline=
+new EventEmitter<void>();
+
+-----------------------------------------
+
+expense-toolbar.html
+
+<button
+
+    type="button"
+
+    class="timeline-btn"
+
+    (click)="timeline.emit()">
+🕒  Timeline
+
+</button>
+
+
+-----------------------------------------------
+
+

@@ -1,0 +1,237 @@
+Yes. Since this is a new feature, we'll build it properly layer by layer, just like the Work Log module.
+
+## Backend Structure
+
+```
+apps/worklog/
+
+├── serializers/
+│   ├── worklog_timeline_serializer.py
+│   └── worklog_timeline_year_serializer.py
+│
+├── services/
+│   └── worklog_timeline_service.py
+│
+├── views/
+│   ├── worklog_timeline_years.py
+│   └── worklog_timeline.py
+│
+└── urls.py
+```
+
+### Endpoints
+
+```
+GET /api/worklog/timeline/years/
+```
+
+Returns
+
+```json
+[
+    {
+        "year": 2026,
+        "total_logs": 120
+    },
+    {
+        "year": 2025,
+        "total_logs": 92
+    }
+]
+```
+
+---
+
+```
+POST /api/worklog/timeline/
+```
+
+Request
+
+```json
+{
+    "year":2026
+}
+```
+
+Response
+
+```json
+{
+    "year":2026,
+    "months":[
+        {
+            "month":7,
+            "month_name":"July",
+            "total_logs":18,
+            "weeks":[
+                {
+                    "week_start":"2026-07-28",
+                    "week_end":"2026-08-03",
+                    "week_offset":0,
+                    "count":6
+                }
+            ]
+        }
+    ]
+}
+```
+
+---
+
+# Frontend Structure
+
+```
+features/worklog/
+
+models/
+    timeline-year.ts
+    timeline-week.ts
+    timeline-month.ts
+    timeline-request.ts
+    timeline-response.ts
+
+services/
+    worklog-timeline.service.ts
+
+components/
+
+    timeline-dialog/
+        timeline-dialog.ts
+        timeline-dialog.html
+        timeline-dialog.scss
+```
+
+---
+
+## WorkLog Page
+
+Add
+
+```ts
+showTimeline = false;
+```
+
+Methods
+
+```ts
+openTimeline(): void {
+
+    this.showTimeline = true;
+
+}
+
+closeTimeline(): void {
+
+    this.showTimeline = false;
+
+}
+```
+
+---
+
+When a week is clicked
+
+```ts
+jumpToWeek(
+    weekOffset:number
+):void{
+
+    this.request.week_offset =
+        weekOffset;
+
+    this.closeTimeline();
+
+    this.loadWorkLogs();
+
+}
+```
+
+---
+
+Toolbar
+
+Add one button
+
+```
++ New Work Log
+
+Timeline
+```
+
+---
+
+Page
+
+```html
+<app-worklog-timeline
+
+    *ngIf="showTimeline"
+
+    (selectWeek)="jumpToWeek($event)"
+
+    (close)="closeTimeline()">
+
+</app-worklog-timeline>
+```
+
+---
+
+## Development Order
+
+We'll build it in this order:
+
+### ✅ Step 1
+
+Create backend
+
+```
+Timeline Years API
+```
+
+---
+
+### ✅ Step 2
+
+Create backend
+
+```
+Timeline API (year)
+```
+
+---
+
+### ✅ Step 3
+
+Angular Models
+
+```
+timeline-year
+timeline-request
+timeline-week
+timeline-month
+timeline-response
+```
+
+---
+
+### ✅ Step 4
+
+Timeline Service
+
+---
+
+### ✅ Step 5
+
+Timeline Dialog UI
+
+---
+
+### ✅ Step 6
+
+Jump to selected week
+
+---
+
+This follows the same architecture you've used throughout the project (Models → Service → View on the backend, and Models → Service → Component on the frontend), keeping the codebase consistent and easy to maintain.
+

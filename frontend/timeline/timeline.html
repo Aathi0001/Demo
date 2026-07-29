@@ -1,0 +1,110 @@
+<div
+    class="timeline-backdrop"
+    *ngIf="visible">
+
+    <div class="timeline">
+
+        <div class="header">
+
+            <h2>
+
+                Timeline
+
+            </h2>
+
+            <button
+                (click)="closeDialog()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div
+            class="year"
+
+            *ngFor="let year of years">
+
+            <div
+                class="year-header"
+
+                (click)="loadTimeline(year.year)">
+
+                <span>
+
+                    {{ selectedYear===year.year ? '▼' : '▶' }}
+
+                </span>
+
+                {{ year.year }}
+
+                ({{ year.total_logs }} logs)
+
+            </div>
+
+            <div
+                *ngIf="selectedYear===year.year">
+
+                <div
+                    class="month"
+
+                    *ngFor="let month of months">
+
+                    <div
+                        class="month-header"
+
+                        (click)="toggleMonth(month.month)">
+
+                        <span>
+
+                            {{ isExpanded(month.month) ? '▼' : '▶' }}
+
+                        </span>
+
+                        {{ month.month_name }}
+
+                        ({{ month.total_logs }} logs)
+
+                    </div>
+
+                    <div
+                        class="weeks"
+
+                        *ngIf="isExpanded(month.month)">
+
+                        <div
+                            class="week"
+
+                            *ngFor="let week of month.weeks"
+
+                            (click)="selectWeek(week.week_offset)">
+
+                            <span>
+				{{ week.week_start | date:'dd MMM' }}
+				
+				-
+				
+				{{ week.week_end | date:'dd MMM' }}
+
+                            </span>
+
+                            <span>
+
+                                {{ week.log_count }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

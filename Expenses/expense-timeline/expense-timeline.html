@@ -1,0 +1,105 @@
+<div
+    class="timeline-backdrop"
+    (click)="close.emit()">
+
+    <div
+        class="timeline-dialog"
+        (click)="$event.stopPropagation()">
+
+        <div class="header">
+
+            <h2>
+
+                Expense Timeline
+
+            </h2>
+
+            <button
+                class="close-btn"
+                (click)="close.emit()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div
+            class="year"
+            *ngFor="let year of years">
+
+            <div
+                class="year-header"
+                (click)="yearSelected.emit(year.year)">
+
+                <span>
+
+                    {{
+                        selectedYear === year.year
+                        ? '▼'
+                        : '▶'
+                    }}
+
+                </span>
+
+                <span class="year-title">
+
+                    {{ year.year }}
+
+                </span>
+
+            </div>
+
+            <div
+                class="month-list"
+                *ngIf="
+                    selectedYear === year.year
+                ">
+
+                <div
+                    class="month-item"
+                    *ngFor="let month of months"
+                    (click)="
+                        monthSelected.emit(
+                            month.month_offset
+                        )
+                    ">
+
+                    <div
+                        class="month-name">
+
+                        {{ month.month_name }}
+
+                    </div>
+
+                    <div
+                        class="month-info">
+
+                        <span>
+
+                            🧾
+                            {{ month.expense_count }}
+                            Expenses
+
+                        </span>
+
+                        <span>
+
+                            ₹
+                            {{
+                                month.total_debit
+                            }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
