@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Sync Database</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/orbitron.css') }}">
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            color: #2c5364;
+	    overflow-x: hidden;
+	    overflow-y: auto;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: black;
+            position: relative;
+        }
+
+        video.bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(to bottom right, rgba(0, 0, 0, 0.92), rgba(0, 255, 231, 0.10));
+
+            
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid #2c5364;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #cfff04;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 16px;
+            background: #2c5364;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #cfff04;
+            color: white;
+	    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .output {
+            background: #111;
+            color: #0ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px dashed #0ff;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .output.error {
+            color: #ff4b4b;
+            border-color: #ff4b4b;
+        }
+
+        a {
+            color: #00bcd4;
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a:hover {
+            color: #cfff04;
+        }
+
+        @media (max-width: 600px) {
+            h2 { font-size: 18px; }
+            button { width: 100%; }
+        }
+        .loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    color: #2c5364;
+    font-size: 20px;
+    font-family: 'Orbitron', sans-serif;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-overlay .loader {
+    border: 8px solid #222;
+    border-top: 8px solid #2c5364;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- 🔥 Background Video -->
+    <video autoplay muted loop class="bg-video">
+        <source src="{{ url_for('static', filename='video/sync.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- 🎨 Gradient Overlay -->
+    <div class="gradient-overlay"></div>
+
+    <div class="container">
+
+        <h2>🛠️ SYNC YOUR DATABASE</h2>
+
+        <!-- ========================= -->
+        <!-- Server URL Configuration -->
+        <!-- ========================= -->
+        <form id="configForm" method="POST" style="margin-bottom:30px;">
+
+            <input type="hidden" name="action" value="save">
+
+            <label style="
+                display:block;
+                text-align:left;
+                margin-bottom:10px;
+                color:#cfff04;
+                font-weight:bold;
+            ">
+                🌐 Sync Server URL
+            </label>
+
+            <input
+                type="text"
+                id="base_url"
+                name="base_url"
+                value="{{ base_url }}"
+                style="
+                    width:100%;
+                    padding:12px;
+                    border-radius:8px;
+                    border:2px solid #2c5364;
+                    background:#111;
+                    color:#0ff;
+                    font-size:15px;
+                    box-sizing:border-box;
+                "
+                required
+            >
+	    <p style="color:#ccc; margin-bottom:20px;">
+    Configure the active sync server and synchronize your local database.
+</p>
+
+            <button
+                type="submit"
+                style="
+                    width:100%;
+                    margin-top:15px;
+                ">
+                💾 SAVE SERVER URL
+            </button>
+
+        </form>
+
+        <hr style="margin:25px 0;border-color:#2c5364;">
+
+        <!-- ========================= -->
+        <!-- Sync Form -->
+        <!-- ========================= -->
+        <form id="syncForm" method="POST">
+
+            <input type="hidden" name="action" value="sync">
+
+            <button id="syncButton" type="submit">
+                ⚡ START SYNC
+            </button>
+
+        </form>
+
+        <!-- ========================= -->
+        <!-- Loading -->
+        <!-- ========================= -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loader"></div>
+            <p>Syncing in progress... Please wait ⚙️</p>
+        </div>
+
+        {% if sync_output %}
+            <h3>✅ SYNC OUTPUT:</h3>
+            <div class="output">{{ sync_output }}</div>
+        {% elif error %}
+            <h3>❌ ERROR:</h3>
+            <div class="output error">{{ error }}</div>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}">⬅ BACK TO HOME</a>
+
+    </div>
+
+    <script>
+
+        // Show loading only when syncing
+        const syncForm = document.getElementById("syncForm");
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const syncButton = document.getElementById("syncButton");
+
+        syncForm.addEventListener("submit", function () {
+
+            syncButton.style.display = "none";
+            loadingOverlay.style.display = "flex";
+
+        });
+
+    </script>
+
+</body>
+</html>

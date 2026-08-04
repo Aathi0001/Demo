@@ -1,0 +1,91 @@
+               LAPTOP (MySQL)
+                     │
+                     │
+             User clicks Sync
+                     │
+                     ▼
+        1. Ask Website for Status
+                     │
+                     ▼
+          WEBSITE (SQLite)
+                     │
+        returns last_node_id
+        returns last_change_log_id
+                     │
+                     ▼
+      2. Upload New Nodes (Chunked)
+                     │
+        500 rows each request
+                     │
+                     ▼
+          Website inserts them
+                     │
+      continue until <500 rows
+                     │
+                     ▼
+    3. Upload Change Logs (Chunked)
+                     │
+        500 logs each request
+                     │
+                     ▼
+      Website applies operations
+                     │
+      continue until <500 logs
+                     │
+                     ▼
+            Sync Complete
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            User clicks Sync in App
+                     │
+                     ▼
+1. App sends its sync status
+   - last_node_id
+   - last_change_log_id
+                     │
+                     ▼
+2. Laptop uploads New Nodes (Chunked)
+                     │
+          500 rows per request
+                     │
+                     ▼
+          App inserts them
+                     │
+      Continue until <500 rows
+                     │
+                     ▼
+3. Laptop uploads Change Logs (Chunked)
+                     │
+          500 logs per request
+                     │
+                     ▼
+      App applies operations
+        - DELETE
+        - REPLACE
+                     │
+      Continue until <500 logs
+                     │
+                     ▼
+             Sync Complete
